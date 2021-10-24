@@ -1,18 +1,27 @@
-import numpy as np
-from tkinter import Tk, simpledialog, filedialog
+import sys
+from tkinter import Tk, simpledialog, filedialog, messagebox
+
 import matplotlib
-from matplotlib import pyplot as plt
+import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 Tk().withdraw()
 FILE_PATH = filedialog.askopenfilename()
-fileValues = pd.read_csv(FILE_PATH, delimiter='\s+', header=None, names=["points", "y"])
+if not FILE_PATH:
+    sys.exit()
 
-DIM = 2
+fileValues = pd.read_csv(FILE_PATH, delimiter='\s+', header=None, names=["points", "y"])
 points = fileValues.iloc[:, [0, 1]].values
 N = len(points)
 y = np.zeros(N)
 num_of_clusters = simpledialog.askinteger("Input", "Write amount of clusters!")
+if not num_of_clusters:
+    sys.exit()
+
+if num_of_clusters < 1:
+    messagebox.showerror("Error", "Input more than 0 clusters!")
+    sys.exit()
 
 
 def k_means(num_cluster, x_point, y_point, points_number):
